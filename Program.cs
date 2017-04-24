@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using TspAxesRot.BusinessLogic;
 using TspAxesRot.Data;
-using TspAxesRot.Domain;
 
 namespace TspAxesRot
 {
@@ -23,7 +21,7 @@ namespace TspAxesRot
                 Console.WriteLine("Pass sample number when running the app");
                 return;
             }
-            
+
             var axisRotation = new AxisRotation();
             // Load sample data
             var data1 = SampleData.LoadData(sampleNum);
@@ -37,15 +35,6 @@ namespace TspAxesRot
             var axesRot = axisRotation.DoAxesRotationTspWithNoReturn(data2);
             axisRotation.PrintPath(axesRot.Path);
             Console.WriteLine($"AxesRot Distance: {axesRot.DistanceTravelled}");
-        }
-
-        private static Stack<Coordinate> GetPath(Stack<Coordinate> path)
-        {
-            return path;
-        }
-
-        public static void VisitNode(ref List<Node> nodes, int nodeIndex){
-            nodes[nodeIndex].Visited = true;
         }
     }
 }
