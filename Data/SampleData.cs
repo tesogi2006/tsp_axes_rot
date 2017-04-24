@@ -8,8 +8,8 @@ namespace TspAxesRot.Data
 {
     public class SampleData
     {
-        public static List<Node> LoadData(){
-            using (StreamReader r = new StreamReader("Data/data.json")){
+        public static List<Node> LoadData(int sampleNumber){
+            using (StreamReader r = new StreamReader($"Data/sample_data_{sampleNumber}.json")){
                 try{
                     string json = r.ReadToEnd();
                     List<Node> nodes = JsonConvert.DeserializeObject<List<Node>>(json);
