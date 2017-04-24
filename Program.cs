@@ -13,11 +13,12 @@ namespace TspAxesRot
             var data2 = SampleData.LoadData();
 
             // Get Greedy Path
-            var greedy = axisRotation.DoGreedyTspWithNoReturn(data1);
-            Console.WriteLine($"AxesRot Distance: {greedy.DistanceTravelled}");
+            //var greedy = axisRotation.DoGreedyTspWithNoReturn(data1);
+            //Console.WriteLine($"AxesRot Distance: {greedy.DistanceTravelled}");
 
             // Get Axes Rotation Path
             var axesRot = axisRotation.DoAxesRotationTspWithNoReturn(data2);
+            axisRotation.PrintPath(axesRot.Path);
             Console.WriteLine($"AxesRot Distance: {axesRot.DistanceTravelled}");
         }
 

@@ -23,9 +23,11 @@ namespace TspAxesRot
             // so we need to convert the angle to radians
             var angleRad = DegreesToRadians(rotationAngle);
 
+            var x = Math.Round(coord.X * Math.Cos(angleRad) + coord.Y * Math.Sin(angleRad), 2);
+            var y = Math.Round(-coord.X * Math.Sin(angleRad) + coord.Y * Math.Cos(angleRad), 2);
             return new Coordinate{
-                X = Math.Round(coord.X * Math.Cos(angleRad) - coord.Y * Math.Sin(angleRad), 2),
-                Y = Math.Round(coord.X * Math.Sin(angleRad) + coord.Y * Math.Cos(angleRad), 2)
+                X = x,
+                Y = y
             };
         }
 
@@ -40,7 +42,7 @@ namespace TspAxesRot
             while (graphNodes.Count > 0)
             {
                 Console.WriteLine($"Current node is {curNode}");
-                var d = Double.PositiveInfinity;
+                var minDist = Double.PositiveInfinity;
                 var nextNode = (Node)null;
                 foreach (var node in graphNodes)
                 {
@@ -50,20 +52,19 @@ namespace TspAxesRot
                     {
                         continue;
                     }
-                    var v = GetDistanceBetweenNodes(curNode, node.Coord);
-                    if (v < d)
+                    var dist = GetDistanceBetweenNodes(curNode, node.Coord);
+                    if (dist < minDist)
                     {
-                        d = v;
+                        minDist = dist;
                         nextNode = node;
                     }
-                    Console.WriteLine($"Distance between {curNode} and {node.Coord}: {v}");
                 }
 
+                Console.WriteLine($"****Next node is {nextNode.Coord}****");
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
-                Console.WriteLine($"****Next node is {nextNode.Coord}****");
                 graphNodes.Remove(nextNode);
-                totalDist += d;
+                totalDist += minDist;
             }
 
             return new TspProcessedData {
@@ -84,10 +85,11 @@ namespace TspAxesRot
             
             while (graphNodes.Count > 0)
             {
-                Console.WriteLine($"Current node is {curNode}");
-                var d = Double.PositiveInfinity;    // distance between current and next node
+                var rotAngle = GetRotationAngle(curNode, destNode.Coord);
+                Console.WriteLine($"Current node is {curNode}, rot angle={rotAngle}deg");
                 var xx = Double.PositiveInfinity;   // x' values of the next node
                 var nextNode = (Node)null;
+
                 foreach (var node in graphNodes)
                 {
                     // don't process starting or ending node
@@ -97,24 +99,21 @@ namespace TspAxesRot
                         continue;
                     }
                     // mapped coordinates in x'y' plane
-                    var rotAngle = GetRotationAngle(curNode, destNode.Coord);
-                    Console.WriteLine($"RotationAngle: {rotAngle}");
                     var coord_primes = GetMappedCoord(rotAngle, node.Coord);
-                    Console.WriteLine($"{node.Coord} is mapped to {coord_primes}");
-                    d = GetDistanceBetweenNodes(curNode, node.Coord);
 
                     if(coord_primes.X < xx){
                         nextNode = node;
                         xx = coord_primes.X;
                     }
-                    Console.WriteLine($"Distance between {curNode} and {node.Coord}: {d}");
                 }
 
+                totalDist += GetDistanceBetweenNodes(curNode, nextNode.Coord);
+
+                // now update current node and add to path
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
-                Console.WriteLine($"****Next node is {nextNode.Coord}****");
                 graphNodes.Remove(nextNode);
-                totalDist += d;
+                Console.WriteLine($"****Next node is {nextNode.Coord}**** d={totalDist}");
             }
 
             return new TspProcessedData
@@ -122,6 +121,15 @@ namespace TspAxesRot
                 Path = path,
                 DistanceTravelled = totalDist
             };
+        }
+
+        public void PrintPath(Queue<Coordinate> path){
+            Console.Write("Path: ");
+            while(path.Count > 0){
+                var node = path.Dequeue();
+                Console.Write(node + "=>");
+            }
+            Console.WriteLine();
         }
 
         private double RadiansToDegrees(double radians)
