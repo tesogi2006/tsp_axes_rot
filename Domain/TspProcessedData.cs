@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TspAxesRot
+namespace TspAxesRot.Domain
 {
     public class TspProcessedData
     {

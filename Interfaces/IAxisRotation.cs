@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using TspAxesRot.Domain;
 
-namespace TspAxesRot
+namespace TspAxesRot.Interfaces
 {
     public interface IAxisRotation
     {

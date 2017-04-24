@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using TspAxesRot.Domain;
 
-namespace TspAxesRot
+namespace TspAxesRot.Data
 {
     public class SampleData
     {
         public static List<Node> LoadData(){
-            using (StreamReader r = new StreamReader("data.json")){
+            using (StreamReader r = new StreamReader("Data/data.json")){
                 try{
                     string json = r.ReadToEnd();
                     List<Node> nodes = JsonConvert.DeserializeObject<List<Node>>(json);
