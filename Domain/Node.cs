@@ -1,4 +1,4 @@
-namespace TspAxesRot
+namespace TspAxesRot.Domain
 {
     public class Coordinate
     {

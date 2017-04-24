@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using TspAxesRot.Domain;
+using TspAxesRot.Interfaces;
 
-namespace TspAxesRot
+namespace TspAxesRot.BusinessLogic
 {
     public class AxisRotation : IAxisRotation
     {

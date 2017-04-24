@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using TspAxesRot.BusinessLogic;
+using TspAxesRot.Data;
+using TspAxesRot.Domain;
 
 namespace TspAxesRot
 {
