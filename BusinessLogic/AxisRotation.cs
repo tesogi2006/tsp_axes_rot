@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TspAxesRot.Domain;
 using TspAxesRot.Interfaces;
 
@@ -18,7 +17,8 @@ namespace TspAxesRot.BusinessLogic
         public double GetRotationAngle(Coordinate currentNodeCoord, Coordinate destNodeCoord){
             return Math.Round(
                             RadiansToDegrees(
-                                Math.Atan2(destNodeCoord.Y - currentNodeCoord.Y, destNodeCoord.X - currentNodeCoord.X)), 2);
+                                Math.Atan2(destNodeCoord.Y - currentNodeCoord.Y, destNodeCoord.X - currentNodeCoord.X))
+                            , 2);
         }
 
         public Coordinate GetMappedCoord(double rotationAngle, Coordinate coord){
@@ -36,26 +36,23 @@ namespace TspAxesRot.BusinessLogic
 
         public TspProcessedData DoGreedyTspWithNoReturn(List<Node> graphNodes)
         {
-            // Using list.Remove for now, so copying data for later use
-            var graphNodesCopy = graphNodes;
-
             var path = new Queue<Coordinate>();
-            var curNode = graphNodesCopy[0].Coord;
+            var curNode = graphNodes[0].Coord;
             path.Enqueue(curNode);
-            graphNodesCopy.Remove(graphNodesCopy[0]);
+            graphNodes.Remove(graphNodes[0]);
 
             double totalDist = 0.0;
             
-            while (graphNodesCopy.Count > 0)
+            while (graphNodes.Count > 0)
             {
                 //Console.WriteLine($"Current node is {curNode}");
                 var minDist = Double.PositiveInfinity;
                 var nextNode = (Node)null;
-                foreach (var node in graphNodesCopy)
+                foreach (var node in graphNodes)
                 {
                     // don't process starting or ending node
                     // if it is not the last one
-                    if (node.IsStartOrEnd && graphNodesCopy.Count != 1)
+                    if (node.IsStartOrEnd && graphNodes.Count != 1)
                     {
                         continue;
                     }
@@ -70,7 +67,7 @@ namespace TspAxesRot.BusinessLogic
                 //Console.WriteLine($"****Next node is {nextNode.Coord}****");
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
-                graphNodesCopy.Remove(nextNode);
+                graphNodes.Remove(nextNode);
                 totalDist += minDist;
             }
 
@@ -82,28 +79,25 @@ namespace TspAxesRot.BusinessLogic
 
         public TspProcessedData DoAxesRotationTspWithNoReturn(List<Node> graphNodes)
         {
-            // Using list.Remove for now, so copying data for later use
-            var graphNodesCopy = graphNodes;
-
             var path = new Queue<Coordinate>();
-            var curNode = graphNodesCopy[0].Coord;
+            var curNode = graphNodes[0].Coord;
             path.Enqueue(curNode);
-            graphNodesCopy.Remove(graphNodesCopy[0]);
+            graphNodes.Remove(graphNodes[0]);
             double totalDist = 0.0;
-            var destNode = graphNodesCopy[graphNodesCopy.Count - 1];
+            var destNode = graphNodes[graphNodes.Count - 1];
             
-            while (graphNodesCopy.Count > 0)
+            while (graphNodes.Count > 0)
             {
                 var rotAngle = GetRotationAngle(curNode, destNode.Coord);
                 //Console.WriteLine($"Current node is {curNode}, rot angle={rotAngle}deg");
                 var xx = Double.PositiveInfinity;   // x' values of the next node
                 var nextNode = (Node)null;
 
-                foreach (var node in graphNodesCopy)
+                foreach (var node in graphNodes)
                 {
                     // don't process starting or ending node
                     // if it is not the last one
-                    if (node.IsStartOrEnd && graphNodesCopy.Count != 1)
+                    if (node.IsStartOrEnd && graphNodes.Count != 1)
                     {
                         continue;
                     }
@@ -121,7 +115,7 @@ namespace TspAxesRot.BusinessLogic
                 // now update current node and add to path
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
-                graphNodesCopy.Remove(nextNode);
+                graphNodes.Remove(nextNode);
                 //Console.WriteLine($"****Next node is {nextNode.Coord}**** d={totalDist}");
             }
 
