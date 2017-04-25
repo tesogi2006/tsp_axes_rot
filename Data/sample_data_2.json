@@ -9,16 +9,8 @@
     },
     {
         "coord": {
-            "x": 3,
-            "y": 3
-        },
-        "visited": false,
-        "isStartOrEnd": false
-    },
-    {
-        "coord": {
-            "x": 1,
-            "y": -7
+            "x": 2,
+            "y": 2
         },
         "visited": false,
         "isStartOrEnd": false
@@ -26,7 +18,7 @@
     {
         "coord": {
             "x": 5,
-            "y": -5
+            "y": 2
         },
         "visited": false,
         "isStartOrEnd": false
@@ -41,23 +33,23 @@
     },
     {
         "coord": {
-            "x": 11,
-            "y": -4
+            "x": 9,
+            "y": 0
         },
         "visited": false,
         "isStartOrEnd": false
     },
     {
         "coord": {
-            "x": 11,
-            "y": 2
+            "x": -6,
+            "y": 3
         },
         "visited": false,
         "isStartOrEnd": false
     },
     {
         "coord": {
-            "x": 14,
+            "x": 12,
             "y": 0
         },
         "visited": false,

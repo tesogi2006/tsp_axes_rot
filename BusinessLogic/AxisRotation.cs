@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TspAxesRot.Domain;
 using TspAxesRot.Interfaces;
 
@@ -41,12 +42,13 @@ namespace TspAxesRot.BusinessLogic
             var path = new Queue<Coordinate>();
             var curNode = graphNodesCopy[0].Coord;
             path.Enqueue(curNode);
-
             graphNodesCopy.Remove(graphNodesCopy[0]);
+
             double totalDist = 0.0;
+            
             while (graphNodesCopy.Count > 0)
             {
-                Console.WriteLine($"Current node is {curNode}");
+                //Console.WriteLine($"Current node is {curNode}");
                 var minDist = Double.PositiveInfinity;
                 var nextNode = (Node)null;
                 foreach (var node in graphNodesCopy)
@@ -65,7 +67,7 @@ namespace TspAxesRot.BusinessLogic
                     }
                 }
 
-                Console.WriteLine($"****Next node is {nextNode.Coord}****");
+                //Console.WriteLine($"****Next node is {nextNode.Coord}****");
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
                 graphNodesCopy.Remove(nextNode);
@@ -93,7 +95,7 @@ namespace TspAxesRot.BusinessLogic
             while (graphNodesCopy.Count > 0)
             {
                 var rotAngle = GetRotationAngle(curNode, destNode.Coord);
-                Console.WriteLine($"Current node is {curNode}, rot angle={rotAngle}deg");
+                //Console.WriteLine($"Current node is {curNode}, rot angle={rotAngle}deg");
                 var xx = Double.PositiveInfinity;   // x' values of the next node
                 var nextNode = (Node)null;
 
@@ -120,7 +122,7 @@ namespace TspAxesRot.BusinessLogic
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
                 graphNodesCopy.Remove(nextNode);
-                Console.WriteLine($"****Next node is {nextNode.Coord}**** d={totalDist}");
+                //Console.WriteLine($"****Next node is {nextNode.Coord}**** d={totalDist}");
             }
 
             return new TspProcessedData
@@ -130,17 +132,18 @@ namespace TspAxesRot.BusinessLogic
             };
         }
 
-        public void PrintPath(Queue<Coordinate> path){
+        public void DisplayData(TspProcessedData processedData){
             Console.Write("Path: ");
-            while(path.Count > 0){
-                var node = path.Dequeue();
+            while(processedData.Path.Count > 0){
+                var node = processedData.Path.Dequeue();
                 Console.Write(node);
                 
-                if(path.Count != 0){
+                if(processedData.Path.Count != 0){
                     Console.Write("=>");
                 }
             }
             Console.WriteLine();
+            Console.WriteLine($"Total Distatnce: {processedData.DistanceTravelled}");
         }
 
         private double RadiansToDegrees(double radians)
@@ -152,5 +155,13 @@ namespace TspAxesRot.BusinessLogic
         {
             return degrees * Math.PI / 180;
         }
+        
+        // private List<Node> UnvisitedNodes(List<Node> nodes)
+        // {
+        //     return nodes.FindAll(x => x.Visited = false).ToList();
+        // }
+        // private void ResetChanges(List<Node> graphNodes){
+        //     graphNodes.ForEach(x => x.Visited = false);
+        // }
     }
 }
