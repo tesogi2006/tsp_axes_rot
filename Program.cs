@@ -10,25 +10,12 @@ namespace TspAxesRot
     {
         public static void Main(string[] args)
         {
-            var sample = 2;
+            // generate random data
+            //SampleData.GenerateRandomData(10, true);
+
+            var sample = 10;
             var data_gr = SampleData.LoadData(sample);
             var data_ar = SampleData.LoadData(sample);
-            // var data = (List<Node>)null; 
-            // if(args.Length == 1){
-            //     try{
-            //         var sampleNum = Convert.ToByte(args[0]);
-            //         //Console.WriteLine("using sample data " + sampleNum);
-                    
-            //         // Load sample data
-            //         data = SampleData.LoadData(sampleNum);
-            //     }catch(Exception e){
-            //         Console.WriteLine($"ERROR: {e}");
-            //         throw;
-            //     }
-            // }else{
-            //     Console.WriteLine("Pass sample number when running the app (1 or 2).");
-            //     return;
-            // }
 
             var axisRotation = new AxisRotation();
 
