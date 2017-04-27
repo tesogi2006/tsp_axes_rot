@@ -10,8 +10,8 @@ namespace TspAxesRot.Data
     {
         private static Random _random = new Random(1);
 
-        public static List<Node> LoadData(int sampleNumber){
-            using (StreamReader r = new StreamReader($"Data/sample_data_{sampleNumber}.json")){
+        public static List<Node> LoadDataFromJsonFile(string filename){
+            using (StreamReader r = new StreamReader(filename)){
                 try{
                     string json = r.ReadToEnd();
                     List<Node> nodes = JsonConvert.DeserializeObject<List<Node>>(json);
@@ -24,7 +24,7 @@ namespace TspAxesRot.Data
             }
         }
 
-        public static void GenerateRandomData(int numberOfNodes, bool save){
+        public static List<Node> GenerateRandomData(int numberOfNodes, string filename=""){
             var nodes = new List<Node>();
             for(int i = 0; i < numberOfNodes; i++){
                 var node = new Node
@@ -39,14 +39,16 @@ namespace TspAxesRot.Data
                 nodes.Add(node);
             }
 
-            if(save){
-                SaveDataToFile(nodes, numberOfNodes);
+            if(!string.IsNullOrEmpty(filename)){
+                SaveDataToFile(nodes, filename);
             }
+
+            return nodes;
         }
 
-        public static void SaveDataToFile(List<Node> nodes, int numberOfNodes)
+        public static void SaveDataToFile(List<Node> nodes, string filename)
         {
-            using (var r = new StreamWriter($"Data/sample_data_{numberOfNodes}.json"))
+            using (var r = new StreamWriter(filename))
             {
                 try
                 {
