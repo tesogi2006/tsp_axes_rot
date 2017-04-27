@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TspAxesRot.Domain;
 using TspAxesRot.Interfaces;
 
@@ -36,23 +37,27 @@ namespace TspAxesRot.BusinessLogic
 
         public TspProcessedData DoGreedyTspWithNoReturn(List<Node> graphNodes)
         {
+            // working on a copy of the data since I'm using List.Remove
+            // which is not ideal, but just for now
+            var nodesCopy = GetDataCopy(graphNodes);
+
             var path = new Queue<Coordinate>();
-            var curNode = graphNodes[0].Coord;
+            var curNode = nodesCopy[0].Coord;
             path.Enqueue(curNode);
-            graphNodes.Remove(graphNodes[0]);
+            nodesCopy.Remove(nodesCopy[0]);
 
             double totalDist = 0.0;
             
-            while (graphNodes.Count > 0)
+            while (nodesCopy.Count > 0)
             {
                 //Console.WriteLine($"Current node is {curNode}");
                 var minDist = Double.PositiveInfinity;
                 var nextNode = (Node)null;
-                foreach (var node in graphNodes)
+                foreach (var node in nodesCopy)
                 {
                     // don't process starting or ending node
                     // if it is not the last one
-                    if (node.IsStartOrEnd && graphNodes.Count != 1)
+                    if (node.IsStartOrEnd && nodesCopy.Count != 1)
                     {
                         continue;
                     }
@@ -67,7 +72,7 @@ namespace TspAxesRot.BusinessLogic
                 //Console.WriteLine($"****Next node is {nextNode.Coord}****");
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
-                graphNodes.Remove(nextNode);
+                nodesCopy.Remove(nextNode);
                 totalDist += minDist;
             }
 
@@ -79,25 +84,29 @@ namespace TspAxesRot.BusinessLogic
 
         public TspProcessedData DoAxesRotationTspWithNoReturn(List<Node> graphNodes)
         {
+            // working on a copy of the data since I'm using List.Remove
+            // which is not ideal, but just for now
+            var nodesCopy = GetDataCopy(graphNodes);
+
             var path = new Queue<Coordinate>();
-            var curNode = graphNodes[0].Coord;
+            var curNode = nodesCopy[0].Coord;
             path.Enqueue(curNode);
-            graphNodes.Remove(graphNodes[0]);
+            nodesCopy.Remove(nodesCopy[0]);
             double totalDist = 0.0;
-            var destNode = graphNodes[graphNodes.Count - 1];
+            var destNode = nodesCopy[nodesCopy.Count - 1];
             
-            while (graphNodes.Count > 0)
+            while (nodesCopy.Count > 0)
             {
                 var rotAngle = GetRotationAngle(curNode, destNode.Coord);
                 //Console.WriteLine($"Current node is {curNode}, rot angle={rotAngle}deg");
                 var xx = Double.PositiveInfinity;   // x' values of the next node
                 var nextNode = (Node)null;
 
-                foreach (var node in graphNodes)
+                foreach (var node in nodesCopy)
                 {
                     // don't process starting or ending node
                     // if it is not the last one
-                    if (node.IsStartOrEnd && graphNodes.Count != 1)
+                    if (node.IsStartOrEnd && nodesCopy.Count != 1)
                     {
                         continue;
                     }
@@ -115,7 +124,7 @@ namespace TspAxesRot.BusinessLogic
                 // now update current node and add to path
                 curNode = nextNode.Coord;
                 path.Enqueue(curNode);
-                graphNodes.Remove(nextNode);
+                nodesCopy.Remove(nextNode);
                 //Console.WriteLine($"****Next node is {nextNode.Coord}**** d={totalDist}");
             }
 
@@ -140,6 +149,14 @@ namespace TspAxesRot.BusinessLogic
             Console.WriteLine($"Total Distatnce: {processedData.DistanceTravelled}");
         }
 
+        private List<Node> GetDataCopy(List<Node> nodes)
+        {
+            var nodesCopy = new Node[nodes.Count];
+            nodes.CopyTo(nodesCopy);
+
+            return nodesCopy.ToList();
+        }
+
         private double RadiansToDegrees(double radians)
         {
             return radians * (180 / Math.PI);
@@ -149,13 +166,5 @@ namespace TspAxesRot.BusinessLogic
         {
             return degrees * Math.PI / 180;
         }
-        
-        // private List<Node> UnvisitedNodes(List<Node> nodes)
-        // {
-        //     return nodes.FindAll(x => x.Visited = false).ToList();
-        // }
-        // private void ResetChanges(List<Node> graphNodes){
-        //     graphNodes.ForEach(x => x.Visited = false);
-        // }
     }
 }

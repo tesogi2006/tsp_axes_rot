@@ -10,24 +10,20 @@ namespace TspAxesRot
     {
         public static void Main(string[] args)
         {
-            // generate random data
-            //SampleData.GenerateRandomData(10, true);
-
-            var sample = 10;
-            var data_gr = SampleData.LoadData(sample);
-            var data_ar = SampleData.LoadData(sample);
+            var sampleNumber = 2;
+            var sampleData = SampleData.LoadData(sampleNumber);
 
             var axisRotation = new AxisRotation();
 
             // Result from Greedy Algorithm
             Console.WriteLine("********** GREEDY *********");
-            var greedy = axisRotation.DoGreedyTspWithNoReturn(data_gr);
+            var greedy = axisRotation.DoGreedyTspWithNoReturn(sampleData);
             axisRotation.DisplayData(greedy);
             Console.WriteLine("********** GREEDY *********");
 
             // Result from Axes Rotation Algorithm
             Console.WriteLine("********** AXES ROTATION *********");
-            var axesRot = axisRotation.DoAxesRotationTspWithNoReturn(data_ar);
+            var axesRot = axisRotation.DoAxesRotationTspWithNoReturn(sampleData);
             axisRotation.DisplayData(axesRot);
             Console.WriteLine("********** AXES ROTATION *********");
         }
