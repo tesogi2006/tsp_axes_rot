@@ -9,9 +9,16 @@ This is a course project for CS6045 Advanced Algorithms. This application is cre
 5. Install Nuget Package Manager from VS Code Extensions
 6. Open project in VS Code
 7. Using the integrated terminal, execute the following commands. 
- - Restore packages: ```dotnet restore```
- - Build project: ```dotnet build```
- - Run application: ```dotnet run```
+ - ```sh
+    $ dotnet restore
+    $ dotnet build
+    $ dotnet run
+    ```
 
+8. To run the tests, from the tests directory
+ - ```sh
+    $ dotnet restore
+    $ dotnet test
+    ```
 
 -Thanks
